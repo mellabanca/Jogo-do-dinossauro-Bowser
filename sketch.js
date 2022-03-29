@@ -4,6 +4,11 @@ var soloInvisivel;
 var nuvem, nuvemImagem;
 var bowser1, bowser2, bowser3, bowser4, bowser5, bowser6;
 var pontos;
+var grupodenuvens;
+var grupodecactos;
+var PLAY = 1;
+var GAMEOVER = 0;
+var estadodojogo = PLAY;
 
 function preload(){
 
@@ -13,7 +18,7 @@ function preload(){
    bowser1 = loadImage("obstacle1.png");
    bowser2 = loadImage("obstacle2.png");
    bowser3 = loadImage("obstacle3.png");
-   bowser4 = loadImage("obstacle4.png"); 
+   bowser4 = loadImage("obstacle4.png");
    bowser5 = loadImage("obstacle5.png");
    bowser6 = loadImage("obstacle6.png");
 }
@@ -37,33 +42,51 @@ function setup(){
 
    pontos = 0;
 
+   grupodenuvens = new Group();
+   grupodecactos = new Group();
+
 }
 
 function draw(){
 
    background("darkgrey");
 
-   if(keyDown("space") && bowser.y >= 150){
-      bowser.velocityY = -12;
-   }
-   bowser.velocityY = bowser.velocityY + 1;
+   if(estadodojogo === PLAY){
+      solo.velocityX = -2;
+      if(solo.x < 0){
+         solo.x = solo.width/2;
+      }
 
-   solo.velocityX = -2;
-   if(solo.x < 0){
-      solo.x = solo.width/2;
+      if(keyDown("space") && bowser.y >= 150){
+         bowser.velocityY = -12;
+      }
+      bowser.velocityY = bowser.velocityY + 1;
+
+      criarNuvens();
+
+      criarCactos();
+
+      pontos = pontos + Math.round(frameCount/60);
+
+      if(grupodecactos.isTouching(bowser)){
+         estadodojogo = GAMEOVER;
+      }
+   }
+   else if(estadodojogo === GAMEOVER){
+      solo.velocityX = 0;
+
+      grupodenuvens.setVelocityXEach(0);
+
+      grupodecactos.setVelocityXEach(0);
    }
 
    bowser.collide(soloInvisivel);
-
-   criarNuvens();
-
-   criarCactos();
 
    drawSprites();
 
    fill("black");
    text("Pontuação: "+pontos,500,50);
-   pontos = pontos + Math.round(frameCount/60);
+   
 
 }
 
@@ -76,7 +99,8 @@ function criarNuvens(){
    nuvem.velocityX = -3;
    nuvem.depth = bowser.depth;
    bowser.depth = bowser.depth + 1;
-   nuvem.lifetime = 250;
+   nuvem.lifetime = 200;
+   grupodenuvens.add(nuvem);
 }
 }
 
@@ -100,7 +124,8 @@ function criarCactos(){
         break;
         default: break;
      }
-     bowsermau.scale = 0.5;
+     bowsermau.scale= 0.5;
      bowsermau.lifetime = 300;
+     grupodecactos.add(bowsermau);
   }
 }
