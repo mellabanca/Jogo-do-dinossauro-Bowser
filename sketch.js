@@ -45,9 +45,12 @@ function setup(){
    bowser.scale = 0.5;
    bowser.debug = false;
    bowser.setCollider("circle", 0, 0, 40);
+
    //cria e configura o solo invisível
    soloInvisivel = createSprite(200,190,400,10);
    soloInvisivel.visible = false;
+
+   
    //cria as bordas da tela
    borda = createEdgeSprites();
    //pontuação inicia zerada
@@ -55,6 +58,7 @@ function setup(){
    //cria os grupos de nuvens e cactos
    grupodenuvens = new Group();
    grupodecactos = new Group();
+   console.log("até aqui o código funcionou");
    //Cria e configura o texto de game over
    acabouSprite = createSprite(300,100);
    acabouSprite.addImage(acabouImagem);
@@ -63,11 +67,13 @@ function setup(){
    restartSprite = createSprite(300,140);
    restartSprite.addImage(restartImagem);
    restartSprite.scale = 0.5;
+ 
 
 }
 
 //Função de desenho
 function draw(){
+   
    //pinta o fundo de cinza escuro
    background("darkgrey");
    //Define as configurações para o estado PLAY
